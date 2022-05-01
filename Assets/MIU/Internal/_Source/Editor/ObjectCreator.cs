@@ -8,6 +8,8 @@ using Object = UnityEngine.Object;
 
 public class ObjectCreator : EditorWindow
 {
+    public static Vector2 scrollPos;
+
     #region GUI
 
     GUIStyle bigLabel;
@@ -21,6 +23,7 @@ public class ObjectCreator : EditorWindow
 
     private void OnGUI()
     {
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
         SetupStyle();
 
         //UI Content
@@ -53,6 +56,7 @@ public class ObjectCreator : EditorWindow
 
 
         GUILayout.EndVertical();
+        GUILayout.EndScrollView();
     }
 
     bool BaseSetupUI()

@@ -10,6 +10,9 @@ public class MapExporter : EditorWindow
 {
     public static bool hasResult = false;
 
+    public static string exportPath = "Assets/";
+    public static string settingsPath = "Assets/LevelImporterSettings.txt";
+
     MapExporter()
     {
         titleContent = new GUIContent("Level Exporter");
@@ -32,6 +35,11 @@ public class MapExporter : EditorWindow
         GUILayout.BeginVertical();
 
         GUILayout.Label("Level Export", bigLabel);
+        GUILayout.Label("Current Export File Path: " + exportPath, smallLabel);
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Change Export File Location", bigButton)) changeExportFilePath();
+        GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Export", bigButton)) BakeScene();
@@ -63,6 +71,23 @@ public class MapExporter : EditorWindow
             }
         }
         GUILayout.EndVertical();
+    }
+
+    public static void changeExportFilePath()
+    {
+        string filePath = EditorUtility.OpenFolderPanel("Export file location", "", "");
+
+        if (filePath.Length == 0)
+            return;
+
+        Debug.Log("Folder found...");
+        exportPath = filePath + "/";
+
+        StreamWriter writer = new StreamWriter(settingsPath, false);
+        writer.Write(exportPath);
+        writer.Close();
+        
+        AssetDatabase.ImportAsset(settingsPath);
     }
 
     public static void BakeScene()
